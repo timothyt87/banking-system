@@ -1,0 +1,44 @@
+services:
+  database_mongodb:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    networks:
+      - backend
+
+  database_mongo_express:
+    image: mongo-express
+    restart: always
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@database_mongodb:27017/ 
+    ports:
+      - 8001:8081
+    networks:
+      - backend
+      - frontend
+    depends_on:
+      database_mongodb:
+        condition: service_started
+  
+  app:
+    build: backend/
+    depends_on:
+      database_mongodb:
+        condition: service_started
+    ports:
+      - "8000:8000"
+    networks:
+      - frontend
+      - backend
+
+networks:
+  frontend:
+  backend:
+    
+
+
+
