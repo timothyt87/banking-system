@@ -7,6 +7,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
     networks:
       - backend
+    volumes:
+      - ./database/mongodb/data/db:/data/db
 
   database_mongo_express:
     image: mongo-express
@@ -38,7 +40,3 @@ services:
 networks:
   frontend:
   backend:
-    
-
-
-
