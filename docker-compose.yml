@@ -18,7 +18,7 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: root
       ME_CONFIG_MONGODB_URL: mongodb://root:root@database_mongodb:27017/ 
     ports:
-      - 8001:8081
+      - 8002:8081
     networks:
       - backend
       - frontend
@@ -26,16 +26,26 @@ services:
       database_mongodb:
         condition: service_started
   
-  app:
+  app_backend:
     build: backend/
     depends_on:
       database_mongodb:
         condition: service_started
     ports:
-      - "8000:8000"
+      - 8001:8000
     networks:
       - frontend
       - backend
+  
+  app_frontend:
+    build: frontend/
+    depends_on:
+      app_backend:
+        condition: service_started
+    networks:
+      - frontend
+    ports:
+      - 8000:80
 
 networks:
   frontend:
