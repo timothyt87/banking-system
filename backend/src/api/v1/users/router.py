@@ -14,3 +14,21 @@ user_router = APIRouter(
 )
 async def create_new_user(User: PostNewUser):
     return User
+
+
+# Update User
+@user_router.put(
+    path='/{user_id}',
+    description="Update user data"
+)
+async def update_user_data(user_id):
+    return user_id
+
+
+# Delete User
+@user_router.delete(
+    path='/{user_id}',
+    description="Delete user"
+)
+async def update_user_data(user_id):
+    return user_id
