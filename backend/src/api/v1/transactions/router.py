@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from .utils import generate_trx_id
 
 # Initialize /transactions routes
 transactions_router = APIRouter(
@@ -10,4 +11,4 @@ transactions_router = APIRouter(
 # index route
 @transactions_router.get('/')
 async def index():
-    return "Transactions index"
+    return await generate_trx_id()
