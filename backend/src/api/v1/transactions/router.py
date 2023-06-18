@@ -2,6 +2,7 @@ import datetime
 
 from fastapi import APIRouter
 from .utils import generate_trx_id
+from .schemas import TransferFund
 
 # Initialize /transactions routes
 transactions_router = APIRouter(
@@ -22,18 +23,16 @@ async def index():
     description="Transfer fund to another account"
 )
 async def transfer_fund(
-        sender_account_number: int,
-        recipient_account_number: int,
-        amount: int
+        trx_detail: TransferFund
 ):
     trx_fee: int = 6500
-    total_fund_deduct = amount + trx_fee
+    total_fund_deduct = trx_detail.amount + trx_fee
     return {
         "trx_id": await generate_trx_id(),
         "trx_timestamp": datetime.datetime.now(),
-        "sender_account_number": sender_account_number,
-        "recipient_account_number": recipient_account_number,
-        "amount": amount,
+        "sender_account_number": trx_detail.sender_account_number,
+        "recipient_account_number": trx_detail.recipient_account_number,
+        "amount": trx_detail.amount,
         "trx_fee": trx_fee,
         "total_fund_deduct": total_fund_deduct,
         "transfer_method": "immediate"
