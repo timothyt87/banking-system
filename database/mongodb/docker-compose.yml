@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  database_mongodb:
+    restart: always
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongodb
+      MONGO_INITDB_ROOT_PASSWORD: mongodb
+    volumes:
+      - ./mongodb:/data/db
+    ports:
+      - "27017:27017"
+
+  database_mongoexpress:
+    restart: always
+    image: mongo-express
+    depends_on:
+      - database_mongodb
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: mongodb
+      ME_CONFIG_MONGODB_ADMINPASSWORD: mongodb
+      ME_CONFIG_MONGODB_URL: mongodb://mongodb:mongodb@database_mongodb:27017/
+    ports:
+      - "9000:8081"
