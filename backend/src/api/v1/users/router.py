@@ -1,5 +1,8 @@
-from fastapi import APIRouter
-from .schemas import PostNewUser
+from fastapi import APIRouter, status
+from fastapi.responses import JSONResponse
+
+from api.v1.users.schemas import PostNewUser, ResponseUserCreated
+from api.v1.users.service import insert_new_user
 
 user_router = APIRouter(
     prefix='/users',
@@ -11,9 +14,18 @@ user_router = APIRouter(
 @user_router.post(
     path='/',
     description='Create new user',
+    response_model=ResponseUserCreated
 )
-async def create_new_user(User: PostNewUser):
-    return User
+async def create_new_user(user: PostNewUser):
+    created_user = await insert_new_user(user)
+
+    if created_user:
+        return ResponseUserCreated(
+            status=status.HTTP_201_CREATED,
+            message=created_user
+        )
+    else:
+        return JSONResponse(content="User Already Exists", status_code=status.HTTP_400_BAD_REQUEST)
 
 
 # Update User

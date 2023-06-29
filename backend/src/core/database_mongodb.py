@@ -4,6 +4,7 @@ from motor.motor_asyncio import AsyncIOMotorCollection
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from configurations.settings import Settings
 from pymongo import ASCENDING, DESCENDING, TEXT, IndexModel
+from pymongo.errors import CollectionInvalid
 
 
 class MongoDbDatabaseClass:
@@ -28,16 +29,13 @@ class MongoDbDatabaseClass:
         database: AsyncIOMotorDatabase = conn[Settings.DATABASE_NAME]
 
         # Create User Collections
-        user_collections: AsyncIOMotorCollection = database['users']
-
-        # Create Index for User Collections
-        index_username = IndexModel([("username", TEXT)], unique=True)
-        index_email = IndexModel([("email", TEXT)], unique=True)
-
-        await user_collections.create_indexes([
-            index_username,
-            index_email
-        ])
+        try:
+            await database.create_collection(
+                name="users",
+                check_exists=True
+            )
+        except CollectionInvalid as e:
+            Settings.SERVER_LOGGER.debug(e)
 
 
 mongodb = MongoDbDatabaseClass()
