@@ -7,7 +7,7 @@ class User(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
-    nomor_rekening: str
+    nomor_rekening: list[str]
     nik: str
     balance: float = 0.0
     api_token: str | None = None

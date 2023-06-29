@@ -19,13 +19,10 @@ user_router = APIRouter(
 async def create_new_user(user: PostNewUser):
     created_user = await insert_new_user(user)
 
-    if created_user:
-        return ResponseUserCreated(
-            status=status.HTTP_201_CREATED,
-            message=created_user
-        )
-    else:
-        return JSONResponse(content="User Already Exists", status_code=status.HTTP_400_BAD_REQUEST)
+    return ResponseUserCreated(
+        status=status.HTTP_201_CREATED,
+        message=created_user
+    )
 
 
 # Update User
