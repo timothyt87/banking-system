@@ -37,5 +37,21 @@ class MongoDbDatabaseClass:
         except CollectionInvalid as e:
             Settings.SERVER_LOGGER.debug(e)
 
+        # Create Branch Collections
+        try:
+            await database.create_collection(
+                name="users",
+                check_exists=True
+            )
+        except CollectionInvalid as e:
+            Settings.SERVER_LOGGER.debug(e)
+
+    @classmethod
+    async def get_collection(cls, collection_name: str):
+        conn: AsyncIOMotorClient = cls.get_connection()
+        database: AsyncIOMotorDatabase = conn[Settings.DATABASE_NAME]
+        collections = database[collection_name]
+        return collections
+
 
 mongodb = MongoDbDatabaseClass()

@@ -6,6 +6,7 @@ import logging
 
 from configurations.settings import Settings
 from core.database_mongodb import mongodb
+from admin.router import admin_router
 
 # Initialize FastAPI
 app = FastAPI()
@@ -13,6 +14,11 @@ app = FastAPI()
 # include api router
 app.include_router(
     router=api_router
+)
+
+# include admin router
+app.include_router(
+    router=admin_router
 )
 
 

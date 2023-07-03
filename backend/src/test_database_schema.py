@@ -24,6 +24,10 @@ def __create_nik_number() -> str:
     return ''.join(secrets.choice(string.digits) for i in range(18))
 
 
+def __create_pin_number() -> str:
+    return ''.join(secrets.choice(string.digits) for i in range(6))
+
+
 def __hash_password(password: str):
     hash = bcrypt.hash(password)
     return hash
@@ -75,15 +79,20 @@ async def insert_data_to_database(data):
     user_id = user_id.upserted_id
 
     account_collections = await get_collection('accounts')
-    await account_collections.insert_one(
-        {
-            "parent_id_ref": user_id,
-            "nomor_rekening": __create_account_number(),
-            "balance": random.randrange(0, 999999999),
-            "created_at": datetime.now(),
-            "is_active": True
-        }
-    )
+    number_of_account = random.randrange(1, 10)
+
+    for num_of_account in range(1, number_of_account):
+        print(user_id)
+        await account_collections.insert_one(
+            {
+                "parent_id_ref": user_id,
+                "nomor_rekening": __create_account_number(),
+                "balance": random.randrange(0, 999999999),
+                "created_at": datetime.now(),
+                'pin_number': __create_pin_number(),
+                "is_active": True
+            }
+        )
 
 
 async def main():
